@@ -21,3 +21,766 @@
     --radius: 12px;
     --shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+  /* HEADER */
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: white; padding: 28px 20px 20px; text-align: center; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .header p { font-size: 13px; opacity: 0.7; margin-top: 4px; }
+
+  /* NAV TABS */
+  .nav { display: flex; overflow-x: auto; background: #fff; border-bottom: 1px solid var(--border); padding: 0 8px; gap: 2px; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav button { padding: 12px 16px; border: none; background: none; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; transition: all .2s; }
+  .nav button.active { color: #0f3460; border-bottom-color: #0f3460; }
+
+  /* PANELS */
+  .panel { display: none; padding: 16px; max-width: 800px; margin: 0 auto; }
+  .panel.active { display: block; }
+
+  /* SECTION TITLE */
+  .sec-title { font-size: 18px; font-weight: 700; margin: 20px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .sec-title::before { content: ''; display: inline-block; width: 4px; height: 20px; background: #0f3460; border-radius: 2px; }
+
+  /* LOBO CARDS */
+  .lobo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  @media (max-width: 500px) { .lobo-grid { grid-template-columns: 1fr; } }
+  .lobo-card { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); background: var(--card); }
+  .lobo-header { padding: 12px 14px; color: white; font-weight: 700; font-size: 15px; }
+  .lobo-body { padding: 12px 14px; }
+  .lobo-body .estruturas { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .lobo-body .funcao { font-size: 13px; }
+  .lobo-body .funcao li { margin-left: 16px; margin-top: 2px; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; margin: 2px 2px 4px 0; font-weight: 500; }
+
+  /* ESTRUTURA TABLE */
+  .est-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
+  .est-table th { background: #0f3460; color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+  .est-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .est-table tr:last-child td { border-bottom: none; }
+  .est-table tr:nth-child(even) td { background: #fafaf8; }
+  .est-name { font-weight: 600; }
+  .est-badge { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
+
+  /* MAPA INTERATIVO */
+  .mapa-wrap { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 16px; }
+  .mapa-controls { display: flex; gap: 6px; flex-wrap: wrap; padding: 12px; border-bottom: 1px solid var(--border); }
+  .mapa-btn { padding: 5px 12px; border-radius: 20px; border: 1.5px solid; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; background: white; }
+  .mapa-btn.active { color: white !important; }
+  .mapa-svg { width: 100%; padding: 12px; }
+  .mapa-info { padding: 12px 14px; border-top: 1px solid var(--border); font-size: 13px; min-height: 60px; }
+  .mapa-info strong { display: block; font-size: 15px; margin-bottom: 4px; }
+
+  /* FLASHCARDS */
+  .fc-container { perspective: 1000px; margin-bottom: 12px; }
+  .fc-card { width: 100%; min-height: 180px; position: relative; transform-style: preserve-3d; transition: transform .5s; cursor: pointer; }
+  .fc-card.flipped { transform: rotateY(180deg); }
+  .fc-face { position: absolute; width: 100%; min-height: 180px; backface-visibility: hidden; border-radius: var(--radius); box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+  .fc-front { background: var(--card); border: 2px solid var(--border); }
+  .fc-back { background: #0f3460; color: white; transform: rotateY(180deg); }
+  .fc-category { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; opacity: 0.6; }
+  .fc-term { font-size: 20px; font-weight: 700; }
+  .fc-hint { font-size: 12px; margin-top: 8px; opacity: 0.5; }
+  .fc-answer { font-size: 14px; line-height: 1.6; }
+  .fc-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .fc-nav button { padding: 8px 20px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--card); font-size: 13px; cursor: pointer; font-weight: 600; }
+  .fc-counter { font-size: 13px; color: var(--muted); }
+  .fc-progress { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 16px; }
+  .fc-progress-bar { height: 4px; background: #0f3460; border-radius: 2px; transition: width .3s; }
+  .fc-filter { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .fc-filter button { padding: 4px 12px; border-radius: 20px; border: 1.5px solid var(--border); background: white; font-size: 12px; cursor: pointer; }
+  .fc-filter button.active { background: #0f3460; color: white; border-color: #0f3460; }
+
+  /* QUIZ */
+  .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .quiz-progress-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; margin: 0 12px; }
+  .quiz-progress-fill { height: 6px; background: #0f3460; border-radius: 3px; transition: width .3s; }
+  .quiz-score-badge { background: #0f3460; color: white; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+  .quiz-question { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 14px; font-size: 16px; font-weight: 600; line-height: 1.5; }
+  .quiz-options { display: grid; gap: 10px; margin-bottom: 14px; }
+  .quiz-opt { padding: 14px 16px; border-radius: var(--radius); border: 1.5px solid var(--border); background: var(--card); font-size: 14px; cursor: pointer; text-align: left; transition: all .2s; line-height: 1.4; }
+  .quiz-opt:hover:not(:disabled) { border-color: #0f3460; background: #f0f4ff; }
+  .quiz-opt.correct { background: #e8f8ed; border-color: #2e9e58; color: #1a6636; }
+  .quiz-opt.wrong { background: #fdecea; border-color: #d94f4f; color: #8b1a1a; }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback { background: var(--card); border-radius: var(--radius); border-left: 4px solid #0f3460; padding: 14px 16px; font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-next { width: 100%; padding: 14px; background: #0f3460; color: white; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; margin-bottom: 16px; display: none; }
+  .quiz-next.show { display: block; }
+  .quiz-result { text-align: center; padding: 32px 20px; }
+  .quiz-result .big-score { font-size: 64px; font-weight: 800; color: #0f3460; }
+  .quiz-result .result-msg { font-size: 18px; font-weight: 600; margin: 8px 0 4px; }
+  .quiz-result .result-sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+  .quiz-restart { padding: 14px 32px; background: #0f3460; color: white; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 700; cursor: pointer; }
+  .quiz-filter { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .quiz-filter button { padding: 5px 14px; border-radius: 20px; border: 1.5px solid var(--border); background: white; font-size: 12px; cursor: pointer; font-weight: 500; }
+  .quiz-filter button.active { background: #0f3460; color: white; border-color: #0f3460; }
+
+  /* RESUMO */
+  .resumo-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 14px; }
+  .resumo-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .resumo-row { display: flex; gap: 12px; margin-bottom: 6px; font-size: 13px; }
+  .resumo-row .label { color: var(--muted); min-width: 100px; flex-shrink: 0; }
+  .resumo-row .value { flex: 1; }
+  .divider { height: 1px; background: var(--border); margin: 10px 0; }
+  .tip-box { background: #fff8e1; border-left: 4px solid #f0b429; border-radius: 8px; padding: 12px 14px; font-size: 13px; margin-bottom: 14px; }
+  .tip-box strong { display: block; margin-bottom: 4px; }
+
+  /* PRATICA */
+  .pratica-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 14px; overflow: hidden; }
+  .pratica-header { padding: 14px 16px; background: #0f3460; color: white; font-weight: 700; font-size: 15px; }
+  .pratica-body { padding: 14px 16px; }
+  .mnemo { background: #f0f4ff; border-radius: 8px; padding: 12px; margin-bottom: 8px; font-size: 13px; }
+  .mnemo strong { color: #0f3460; }
+  .check-list { list-style: none; }
+  .check-list li { padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+  .check-list li:last-child { border-bottom: none; }
+  .check-list li::before { content: '○'; color: var(--muted); flex-shrink: 0; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🧠 Telencéfalo</h1>
+  <p>Guia completo de estudos — Prova 2026</p>
+</div>
+
+<div class="nav">
+  <button class="active" onclick="showTab('mapa')">🗺️ Mapa</button>
+  <button onclick="showTab('lobos')">📋 Lobos</button>
+  <button onclick="showTab('estruturas')">🔬 Estruturas</button>
+  <button onclick="showTab('flash')">📇 Flashcards</button>
+  <button onclick="showTab('quiz')">✏️ Quiz</button>
+  <button onclick="showTab('pratica')">🎯 Prova</button>
+</div>
+
+<!-- ===== MAPA ===== -->
+<div id="tab-mapa" class="panel active">
+
+  <div class="mapa-wrap">
+    <div class="mapa-controls">
+      <button class="mapa-btn active" style="color:var(--frontal);border-color:var(--frontal)" onclick="selectLobe('frontal',this)">Frontal</button>
+      <button class="mapa-btn" style="color:var(--parietal);border-color:var(--parietal)" onclick="selectLobe('parietal',this)">Parietal</button>
+      <button class="mapa-btn" style="color:var(--temporal);border-color:var(--temporal)" onclick="selectLobe('temporal',this)">Temporal</button>
+      <button class="mapa-btn" style="color:var(--occipital);border-color:var(--occipital)" onclick="selectLobe('occipital',this)">Occipital</button>
+      <button class="mapa-btn" style="color:var(--insular);border-color:var(--insular)" onclick="selectLobe('insular',this)">Insular</button>
+      <button class="mapa-btn" style="color:var(--limbico);border-color:var(--limbico)" onclick="selectLobe('limbico',this)">Límbico</button>
+      <button class="mapa-btn" style="color:var(--nucleo);border-color:var(--nucleo)" onclick="selectLobe('nucleos',this)">Núcleos</button>
+    </div>
+    <div class="mapa-svg">
+      <svg viewBox="0 0 420 260" width="100%">
+        <!-- Fundo cérebro face lateral -->
+        <ellipse cx="195" cy="128" rx="165" ry="108" fill="#f5ede0" stroke="#c8b89a" stroke-width="1.5"/>
+        <!-- Lobo Frontal -->
+        <path id="svg-frontal" d="M55,100 Q65,55 115,38 Q165,22 205,32 Q220,35 225,50 L215,95 Q190,88 160,88 Q120,90 85,102 Z"
+          fill="#4A90D9" fill-opacity="0.8" stroke="#2970b9" stroke-width="1.2" style="cursor:pointer" onclick="selectLobe('frontal',null)"/>
+        <!-- Lobo Parietal -->
+        <path id="svg-parietal" d="M220,45 Q270,25 305,35 Q340,48 345,78 Q348,102 332,118 L285,126 Q265,116 242,108 Q228,102 218,92 Z"
+          fill="#E8A838" fill-opacity="0.8" stroke="#c88818" stroke-width="1.2" style="cursor:pointer" onclick="selectLobe('parietal',null)"/>
+        <!-- Lobo Temporal -->
+        <path id="svg-temporal" d="M58,108 Q95,105 148,105 Q188,105 218,105 L218,175 Q196,185 170,192 Q138,200 108,195 Q82,188 65,172 Z"
+          fill="#5BBD72" fill-opacity="0.8" stroke="#3b9d52" stroke-width="1.2" style="cursor:pointer" onclick="selectLobe('temporal',null)"/>
+        <!-- Lobo Occipital -->
+        <path id="svg-occipital" d="M332,88 Q362,78 375,102 Q388,130 378,165 Q368,193 345,200 Q322,196 305,182 Q288,164 286,140 Q283,118 290,105 Z"
+          fill="#D95B5B" fill-opacity="0.8" stroke="#b93b3b" stroke-width="1.2" style="cursor:pointer" onclick="selectLobe('occipital',null)"/>
+        <!-- Lobo Insular (oculto) -->
+        <ellipse id="svg-insular" cx="218" cy="138" rx="22" ry="18" fill="#9B6DD6" fill-opacity="0.85" stroke="#7b4db6" stroke-width="1.2" style="cursor:pointer" onclick="selectLobe('insular',null)"/>
+        <!-- Sulco Central -->
+        <line x1="217" y1="40" x2="213" y2="105" stroke="#222" stroke-width="2" stroke-dasharray="5 3" opacity=".6"/>
+        <!-- Sulco Lateral -->
+        <line x1="58" y1="107" x2="210" y2="115" stroke="#222" stroke-width="2" stroke-dasharray="5 3" opacity=".6"/>
+        <!-- Labels lobos -->
+        <text x="148" y="65" text-anchor="middle" font-size="13" font-weight="700" fill="white">Frontal</text>
+        <text x="298" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="white">Parietal</text>
+        <text x="148" y="155" text-anchor="middle" font-size="12" font-weight="700" fill="white">Temporal</text>
+        <text x="338" y="148" text-anchor="middle" font-size="11" font-weight="700" fill="white">Occipital</text>
+        <text x="218" y="141" text-anchor="middle" font-size="9" font-weight="700" fill="white">Ínsula</text>
+        <!-- Labels sulcos -->
+        <text x="215" y="26" text-anchor="middle" font-size="9" fill="#444">Sulco central</text>
+        <text x="90" y="100" text-anchor="middle" font-size="9" fill="#444">S. lateral</text>
+        <!-- Giro pré-central indicado -->
+        <text x="200" y="90" text-anchor="middle" font-size="8" fill="#1a4a80">pré-c.</text>
+        <text x="232" y="90" text-anchor="middle" font-size="8" fill="#7a5800">pós-c.</text>
+      </svg>
+    </div>
+    <div class="mapa-info" id="mapa-info">
+      <strong style="color:var(--frontal)">Lobo Frontal</strong>
+      <span><b>Sulcos:</b> pré-central, frontal sup., frontal inf. | <b>Giros:</b> pré-central (motor primário), frontal sup., médio, inf. (Broca) | <b>Função:</b> controle motor voluntário, planejamento, personalidade, fala motora</span>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>💡 Dica prática</strong>
+    O sulco central divide pré-central (motor) do pós-central (sensitivo). O sulco lateral (Sylvius) esconde a ínsula por baixo.
+  </div>
+
+  <!-- Face medial resumo -->
+  <div class="resumo-card">
+    <h3><div class="dot" style="background:#0f3460"></div>Face Medial — estruturas principais</h3>
+    <div class="resumo-row"><div class="label">Giro do cíngulo</div><div class="value">Emoções, comportamento autonômico, dor, memória topográfica</div></div>
+    <div class="divider"></div>
+    <div class="resumo-row"><div class="label">Corpo caloso</div><div class="value">Principal integração inter-hemisférica (transfere info motora, sensorial e cognitiva)</div></div>
+    <div class="divider"></div>
+    <div class="resumo-row"><div class="label">Fórnice</div><div class="value">Via eferente do hipocampo — consolidação da memória episódica</div></div>
+    <div class="divider"></div>
+    <div class="resumo-row"><div class="label">Pré-cúneo</div><div class="value">Integração multissensorial, autorreflexão, consciência do "eu", memória episódica</div></div>
+    <div class="divider"></div>
+    <div class="resumo-row"><div class="label">Cúneo</div><div class="value">Processamento visual básico</div></div>
+    <div class="divider"></div>
+    <div class="resumo-row"><div class="label">Sulco calcarino</div><div class="value">Córtex visual primário — localizado no lobo occipital medial</div></div>
+  </div>
+
+  <!-- Face inferior -->
+  <div class="resumo-card">
+    <h3><div class="dot" style="background:#D97B4A"></div>Face Inferior — estruturas principais</h3>
+    <div class="resumo-row"><div class="label">G. parahipocampal</div><div class="value">Portal de entrada/saída do hipocampo; memória contextual e cenas espaciais</div></div>
+    <div class="divider"></div>
+    <div class="resumo-row"><div class="label">Hipocampo</div><div class="value">Consolidação memória curto→longo prazo; memória espacial e topográfica; memória emocional</div></div>
+    <div class="divider"></div>
+    <div class="resumo-row"><div class="label">Unco</div><div class="value">Córtex piriforme (olfato primário); conexão com amígdala</div></div>
+    <div class="divider"></div>
+    <div class="resumo-row"><div class="label">Sulco rinal</div><div class="value">Delimita o unco anteriormente</div></div>
+    <div class="divider"></div>
+    <div class="resumo-row"><div class="label">Sulco colateral</div><div class="value">Delimita lateralmente o giro parahipocampal</div></div>
+  </div>
+</div>
+
+<!-- ===== LOBOS ===== -->
+<div id="tab-lobos" class="panel">
+
+  <div class="sec-title">Lobos — Estruturas e Funções</div>
+
+  <div class="lobo-grid">
+    <div class="lobo-card">
+      <div class="lobo-header" style="background:var(--frontal)">🔵 Lobo Frontal</div>
+      <div class="lobo-body">
+        <div class="estruturas">Sulcos: pré-central (3), frontal sup. (4), frontal inf. (5)<br>Giros: pré-central (6), frontal sup. (7), médio (8), inferior (9)</div>
+        <ul class="funcao">
+          <li>Controle motor voluntário (M1)</li>
+          <li>Funções executivas e planejamento</li>
+          <li>Personalidade e comportamento</li>
+          <li>Área de Broca → fala motora</li>
+        </ul>
+      </div>
+    </div>
+    <div class="lobo-card">
+      <div class="lobo-header" style="background:var(--parietal)">🟡 Lobo Parietal</div>
+      <div class="lobo-body">
+        <div class="estruturas">Sulco: pós-central (10)<br>Giro: pós-central (11)</div>
+        <ul class="funcao">
+          <li>Sensibilidade somática (S1)</li>
+          <li>Tato, pressão, dor, temperatura</li>
+          <li>Vibrações, coceira, cócegas</li>
+          <li>Propriocepção</li>
+          <li>Integração multissensorial</li>
+        </ul>
+      </div>
+    </div>
+    <div class="lobo-card">
+      <div class="lobo-header" style="background:var(--temporal)">🟢 Lobo Temporal</div>
+      <div class="lobo-body">
+        <div class="estruturas">Giros: temporal sup. (12), médio (14), inf. (16)<br>Sulcos: temporal sup. (13), temporal inf. (15)</div>
+        <ul class="funcao">
+          <li>Processamento auditivo</li>
+          <li>Memória de longo prazo</li>
+          <li>Reconhecimento de objetos</li>
+          <li>Área de Wernicke (compreensão)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="lobo-card">
+      <div class="lobo-header" style="background:var(--occipital)">🔴 Lobo Occipital</div>
+      <div class="lobo-body">
+        <div class="estruturas">Face medial: sulco calcarino, cúneo</div>
+        <ul class="funcao">
+          <li>Processamento visual primário</li>
+          <li>Córtex visual (área 17 de Brodmann)</li>
+          <li>Cúneo: processamento visual básico</li>
+        </ul>
+      </div>
+    </div>
+    <div class="lobo-card">
+      <div class="lobo-header" style="background:var(--insular)">🟣 Lobo Insular</div>
+      <div class="lobo-body">
+        <div class="estruturas">Giros da ínsula (17) — dentro do sulco lateral</div>
+        <ul class="funcao">
+          <li>Homeostase e interoepção</li>
+          <li>Processamento gustativo</li>
+          <li>Dor visceral</li>
+          <li>Regulação autonômica</li>
+          <li>Consciência interoceptiva</li>
+        </ul>
+      </div>
+    </div>
+    <div class="lobo-card">
+      <div class="lobo-header" style="background:#5a8a5a">🟩 Sistema Límbico</div>
+      <div class="lobo-body">
+        <div class="estruturas">Giro do cíngulo, hipocampo, amígdala, giro parahipocampal, unco</div>
+        <ul class="funcao">
+          <li>Emoções e comportamento</li>
+          <li>Memória episódica e espacial</li>
+          <li>Olfato (unco)</li>
+          <li>Resposta ao medo (amígdala)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabela giros especiais -->
+  <div class="sec-title">Giros com Funções Específicas</div>
+  <table class="est-table">
+    <tr><th>Giro / Área</th><th>Função</th><th>Lobo</th></tr>
+    <tr><td><span class="est-name">Giro pré-central</span><span class="est-badge" style="background:#dbeeff;color:#0f3460">M1</span></td><td>Área motora primária — controle do músculo esquelético voluntário</td><td>Frontal</td></tr>
+    <tr><td><span class="est-name">Giro pós-central</span><span class="est-badge" style="background:#fff3d9;color:#7a5800">S1</span></td><td>Área somatossensorial — tato, dor, temperatura, propriocepção</td><td>Parietal</td></tr>
+    <tr><td><span class="est-name">Giro frontal inferior</span><span class="est-badge" style="background:#ffe0e0;color:#8b0000">Broca</span></td><td>Área de Broca — produção motora da fala (hemisfério esquerdo)</td><td>Frontal</td></tr>
+    <tr><td><span class="est-name">Giro temporal superior</span><span class="est-badge" style="background:#e0ffe8;color:#1a6636">Wernicke</span></td><td>Área de Wernicke — compreensão da linguagem</td><td>Temporal</td></tr>
+    <tr><td><span class="est-name">Giro do cíngulo</span></td><td>Emoções, regulação autonômica, dor, memória topográfica</td><td>Medial (Frontal/Parietal)</td></tr>
+    <tr><td><span class="est-name">Giro parahipocampal</span></td><td>Portal do hipocampo; memória contextual e cenas espaciais</td><td>Temporal (Inferior)</td></tr>
+    <tr><td><span class="est-name">Pré-cúneo</span></td><td>Autorreflexão, consciência do "eu", memória episódica, integração multissensorial</td><td>Parietal (Medial)</td></tr>
+  </table>
+</div>
+
+<!-- ===== ESTRUTURAS ===== -->
+<div id="tab-estruturas" class="panel">
+
+  <div class="sec-title">Núcleos da Base</div>
+
+  <div class="tip-box">
+    <strong>📌 Corpo Estriado Dorsal = Núcleo Caudado + Núcleo Lentiforme</strong>
+    Juntos formam o corpo estriado dorsal, responsável pelo controle da motricidade.
+  </div>
+
+  <table class="est-table">
+    <tr><th>Estrutura</th><th>Localização</th><th>Função Principal</th></tr>
+    <tr>
+      <td><span class="est-name">Núcleo Caudado</span></td>
+      <td>Corpo estriado dorsal (com cápsula interna medialmente)</td>
+      <td>Controle motor fino, iniciação e planejamento de movimentos voluntários. Regula intensidade dos movimentos. Age integrado com cerebelo e núcleos subtalâmicos.</td>
+    </tr>
+    <tr>
+      <td><span class="est-name">Núcleo Lentiforme</span><br><small style="color:var(--muted)">(putâmen + globo pálido)</small></td>
+      <td>Corpo estriado dorsal (lateral à cápsula interna)</td>
+      <td>Controle motor — parte do circuito dos gânglios da base; modulação e regulação do movimento.</td>
+    </tr>
+    <tr>
+      <td><span class="est-name">Amígdala</span><br><small style="color:var(--muted)">(corpo amigdaloide)</small></td>
+      <td>Polo temporal medial — ponta do lobo temporal</td>
+      <td>Processamento do medo, prazer, raiva, ansiedade. Respostas a estímulos ameaçadores. Parte do sistema límbico.</td>
+    </tr>
+    <tr>
+      <td><span class="est-name">Hipocampo</span></td>
+      <td>Face inferior/medial do lobo temporal</td>
+      <td>Consolidação memória curto→longo prazo. Memória espacial e topográfica. Memória de eventos emocionais e de prazer.</td>
+    </tr>
+    <tr>
+      <td><span class="est-name">Cápsula Interna</span></td>
+      <td>Entre núcleo caudado (medial) e núcleo lentiforme (lateral)</td>
+      <td>Principal via de fibras entre córtex e tronco encefálico (trato corticospinal, tálamo-cortical).</td>
+    </tr>
+    <tr>
+      <td><span class="est-name">Cápsula Externa</span></td>
+      <td>Lateral ao núcleo lentiforme</td>
+      <td>Fibras de associação do córtex insular com o frontal e temporal.</td>
+    </tr>
+    <tr>
+      <td><span class="est-name">Corpo Caloso</span></td>
+      <td>Face medial — conecta os dois hemisférios</td>
+      <td>Principal via de integração inter-hemisférica. Transfere informações sensoriais, motoras e cognitivas entre hemisférios.</td>
+    </tr>
+    <tr>
+      <td><span class="est-name">Fórnice</span></td>
+      <td>Face medial — abaixo do corpo caloso</td>
+      <td>Principal via eferente do hipocampo. Essencial para consolidação da memória episódica e reconhecimento de informações.</td>
+    </tr>
+    <tr>
+      <td><span class="est-name">Tálamo</span></td>
+      <td>Diencéfalo — abaixo do telencéfalo</td>
+      <td>Estação de retransmissão de todas as informações sensoriais (exceto olfato) para o córtex.</td>
+    </tr>
+  </table>
+
+  <div class="sec-title">Sulcos Importantes</div>
+  <table class="est-table">
+    <tr><th>Sulco</th><th>Localização</th><th>Importância</th></tr>
+    <tr><td><span class="est-name">Sulco Central</span><br><small>(Rolando)</small></td><td>Entre lobos frontal e parietal</td><td>Divide área motora (anterior) da sensitiva (posterior). Marco anatômico fundamental.</td></tr>
+    <tr><td><span class="est-name">Sulco Lateral</span><br><small>(Sylvius)</small></td><td>Borda superior do lobo temporal</td><td>Separa frontal/parietal do temporal. A ínsula fica escondida dentro dele.</td></tr>
+    <tr><td><span class="est-name">Sulco Calcarino</span></td><td>Face medial do lobo occipital</td><td>Contém o córtex visual primário — lesão causa cegueira cortical.</td></tr>
+    <tr><td><span class="est-name">Sulco Rinal</span></td><td>Face inferior — delimita o unco</td><td>Separa o córtex piriforme (paleocórtex olfatório) do neocórtex.</td></tr>
+    <tr><td><span class="est-name">Sulco Colateral</span></td><td>Face inferior — lateral ao parahipocampal</td><td>Delimita lateralmente o giro parahipocampal.</td></tr>
+  </table>
+</div>
+
+<!-- ===== FLASHCARDS ===== -->
+<div id="tab-flash" class="panel">
+
+  <div class="fc-filter" id="fc-filter">
+    <button class="active" onclick="filterCards('todos',this)">Todos</button>
+    <button onclick="filterCards('lobos',this)">Lobos</button>
+    <button onclick="filterCards('giros',this)">Giros/Sulcos</button>
+    <button onclick="filterCards('nucleos',this)">Núcleos</button>
+    <button onclick="filterCards('medial',this)">Face Medial</button>
+    <button onclick="filterCards('inferior',this)">Face Inferior</button>
+  </div>
+
+  <div class="fc-progress"><div class="fc-progress-bar" id="fc-bar"></div></div>
+
+  <div class="fc-container">
+    <div class="fc-card" id="fc-card" onclick="flipCard()">
+      <div class="fc-face fc-front">
+        <div class="fc-category" id="fc-cat"></div>
+        <div class="fc-term" id="fc-term"></div>
+        <div class="fc-hint">Toque para ver a resposta</div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-category" style="opacity:.7" id="fc-back-title"></div>
+        <div class="fc-answer" id="fc-answer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fc-nav">
+    <button onclick="prevCard()">← Anterior</button>
+    <span class="fc-counter" id="fc-count"></span>
+    <button onclick="nextCard()">Próximo →</button>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div id="tab-quiz" class="panel">
+
+  <div class="quiz-filter" id="quiz-filter">
+    <button class="active" onclick="setQuizFilter('todos',this)">Todos os temas</button>
+    <button onclick="setQuizFilter('lobos',this)">Lobos</button>
+    <button onclick="setQuizFilter('nucleos',this)">Núcleos</button>
+    <button onclick="setQuizFilter('linguagem',this)">Linguagem</button>
+    <button onclick="setQuizFilter('memoria',this)">Memória</button>
+  </div>
+
+  <div id="quiz-main">
+    <div class="quiz-header">
+      <span id="q-num" style="font-size:13px;color:var(--muted)"></span>
+      <div class="quiz-progress-wrap"><div class="quiz-progress-fill" id="q-prog-fill"></div></div>
+      <div class="quiz-score-badge" id="q-score-badge">0/0</div>
+    </div>
+    <div class="quiz-question" id="q-text"></div>
+    <div class="quiz-options" id="q-opts"></div>
+    <div class="quiz-feedback" id="q-feedback"></div>
+    <button class="quiz-next" id="q-next" onclick="nextQ()">Próxima pergunta →</button>
+  </div>
+
+  <div id="quiz-result" style="display:none">
+    <div class="quiz-result">
+      <div class="big-score" id="result-score"></div>
+      <div class="result-msg" id="result-msg"></div>
+      <div class="result-sub" id="result-sub"></div>
+      <button class="quiz-restart" onclick="initQuiz()">🔄 Novo Quiz</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROVA ===== -->
+<div id="tab-pratica" class="panel">
+
+  <div class="sec-title">Para a Prova Prática</div>
+
+  <div class="pratica-card">
+    <div class="pratica-header">🎯 O que identificar no cérebro real</div>
+    <div class="pratica-body">
+      <p style="font-size:13px;margin-bottom:12px">Na face <strong>súpero-lateral</strong>, procure:</p>
+      <ul class="check-list">
+        <li>Sulco central (Rolando) — divida motor/sensitivo</li>
+        <li>Giro pré-central (rosa, antes do sulco central)</li>
+        <li>Giro pós-central (azul, depois do sulco central)</li>
+        <li>Sulco lateral (Sylvius) — grande sulco horizontal</li>
+        <li>Lobo frontal, parietal, temporal, occipital</li>
+        <li>Giro frontal inferior (área de Broca)</li>
+        <li>Giro temporal superior (área de Wernicke)</li>
+      </ul>
+      <p style="font-size:13px;margin: 12px 0">Na face <strong>medial</strong>, procure:</p>
+      <ul class="check-list">
+        <li>Corpo caloso (grande arco branco no centro)</li>
+        <li>Fórnice (abaixo do corpo caloso)</li>
+        <li>Giro do cíngulo (acima do corpo caloso)</li>
+        <li>Pré-cúneo e Cúneo (lobo parietal/occipital medial)</li>
+        <li>Sulco calcarino (lobo occipital)</li>
+      </ul>
+      <p style="font-size:13px;margin: 12px 0">Na face <strong>inferior</strong>, procure:</p>
+      <ul class="check-list">
+        <li>Giro parahipocampal (temporal medial)</li>
+        <li>Unco (gancho na ponta medial temporal)</li>
+        <li>Sulco rinal (verde) e sulco colateral (vermelho)</li>
+        <li>Hipocampo (visível no corte)</li>
+        <li>Amígdala (no polo temporal)</li>
+      </ul>
+      <p style="font-size:13px;margin: 12px 0">No <strong>corte axial</strong> (cérebro aberto), procure:</p>
+      <ul class="check-list">
+        <li>Núcleo caudado (medial, roxo)</li>
+        <li>Núcleo lentiforme (lateral ao caudado, verde)</li>
+        <li>Cápsula interna (entre caudado e lentiforme)</li>
+        <li>Tálamo (massa cinzenta central)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec-title">Macetes para Memorizar</div>
+
+  <div class="pratica-card">
+    <div class="pratica-header">🧠 Mnemônicos</div>
+    <div class="pratica-body">
+      <div class="mnemo">
+        <strong>Pré-central = MOTOR | Pós-central = SENSITIVO</strong><br>
+        <span style="font-size:13px">"Antes (pré) você age → motor. Depois (pós) você sente → sensitivo."</span>
+      </div>
+      <div class="mnemo">
+        <strong>Broca × Wernicke</strong><br>
+        <span style="font-size:13px"><b>Broca</b> = <b>B</b>oca (fala, produção) → lobo frontal<br><b>Wernicke</b> = entende a <b>W</b>ords (compreensão) → lobo temporal</span>
+      </div>
+      <div class="mnemo">
+        <strong>Corpo caloso = PONTE entre hemisférios</strong><br>
+        <span style="font-size:13px">O maior feixe de fibras do cérebro. Liga hemisfério esquerdo ↔ direito.</span>
+      </div>
+      <div class="mnemo">
+        <strong>Hipocampo = CAVALO-MARINHO da memória</strong><br>
+        <span style="font-size:13px">O nome vem da semelhança com um cavalo-marinho (hippocampus em latim). Sem hipocampo → não forma novas memórias (caso H.M.).</span>
+      </div>
+      <div class="mnemo">
+        <strong>Amígdala = ALARME emocional</strong><br>
+        <span style="font-size:13px">Processa medo, raiva, prazer, ansiedade. Nome vem de "amêndoa" — formato em amêndoa no temporal.</span>
+      </div>
+      <div class="mnemo">
+        <strong>Ínsula = ESCONDIDA no sulco lateral</strong><br>
+        <span style="font-size:13px">Fica completamente coberta pelos lobos frontal, parietal e temporal. Só aparece quando abre o sulco lateral.</span>
+      </div>
+      <div class="mnemo">
+        <strong>Núcleo Caudado + Lentiforme = CORPO ESTRIADO DORSAL</strong><br>
+        <span style="font-size:13px">"Caudado tem cauda (cabeça, corpo, cauda). Lentiforme tem forma de lente (biconvexo)."</span>
+      </div>
+      <div class="mnemo">
+        <strong>Fórnice = ESTRADA do hipocampo</strong><br>
+        <span style="font-size:13px">Principal saída de informação do hipocampo para o resto do cérebro.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pratica-card">
+    <div class="pratica-header">📝 Perguntas prováveis na prova teórica</div>
+    <div class="pratica-body">
+      <ul class="check-list">
+        <li>Qual é a função do giro pré-central? → Área motora primária (M1), controle do músculo esquelético voluntário</li>
+        <li>O que o giro pós-central processa? → Somatossensorial: tato, dor, temperatura, pressão, propriocepção</li>
+        <li>Onde fica a ínsula e por que ela é difícil de ver? → Dentro do sulco lateral, coberta pelos lobos adjacentes</li>
+        <li>Qual é a diferença entre afasia de Broca e de Wernicke? → Broca: não fala (produção). Wernicke: não entende (compreensão)</li>
+        <li>O que acontece com lesão no hipocampo? → Amnésia anterógrada — não consolida novas memórias</li>
+        <li>O que a amígdala processa? → Medo, prazer, raiva, ansiedade — respostas a estímulos ameaçadores</li>
+        <li>Qual é a função do corpo caloso? → Integração inter-hemisférica (conecta hemisfério esquerdo e direito)</li>
+        <li>O fórnice é via aferente ou eferente do hipocampo? → Eferente (principal saída do hipocampo)</li>
+        <li>Quais são as 3 faces do telencéfalo? → Súpero-lateral, medial, inferior</li>
+        <li>O que compõe o corpo estriado dorsal? → Núcleo caudado + núcleo lentiforme</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== TAB NAVIGATION =====
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if(id === 'flash') renderCard();
+  if(id === 'quiz') initQuiz();
+}
+
+// ===== MAPA =====
+const lobeInfo = {
+  frontal: { color: '#4A90D9', name: 'Lobo Frontal', text: '<b>Sulcos:</b> pré-central (3), frontal sup. (4), frontal inf. (5) | <b>Giros:</b> pré-central = MOTOR PRIMÁRIO (M1), frontal sup. (7), médio (8), inferior = BROCA (9) | <b>Função:</b> controle motor voluntário, funções executivas, planejamento, personalidade, fala motora' },
+  parietal: { color: '#E8A838', name: 'Lobo Parietal', text: '<b>Sulco:</b> pós-central (10) | <b>Giro:</b> pós-central = SOMATOSSENSORIAL PRIMÁRIO (S1) | <b>Função:</b> tato, pressão, dor, temperatura, vibrações, coceira, cócegas, propriocepção, integração multissensorial, percepção espacial' },
+  temporal: { color: '#5BBD72', name: 'Lobo Temporal', text: '<b>Giros:</b> temporal sup. (12) = WERNICKE, médio (14), inf. (16) | <b>Sulcos:</b> temporal sup. (13), inf. (15) | <b>Função:</b> processamento auditivo, memória de longo prazo, reconhecimento de objetos, compreensão da linguagem' },
+  occipital: { color: '#D95B5B', name: 'Lobo Occipital', text: '<b>Face medial:</b> sulco calcarino (córtex visual primário), cúneo | <b>Função:</b> processamento de informações visuais. Lesão no sulco calcarino → cegueira cortical' },
+  insular: { color: '#9B6DD6', name: 'Lobo Insular (Ínsula)', text: '<b>Estrutura:</b> giros da ínsula (17) — ESCONDIDA dentro do sulco lateral | <b>Função:</b> homeostase, consciência interoceptiva, processamento gustativo, dor visceral, regulação autonômica' },
+  limbico: { color: '#D97B4A', name: 'Sistema Límbico', text: '<b>Estruturas:</b> giro do cíngulo, hipocampo, amígdala, giro parahipocampal, unco, fórnice | <b>Função:</b> emoções, memória episódica, memória espacial, olfato, comportamento social' },
+  nucleos: { color: '#5BBDBD', name: 'Núcleos da Base', text: '<b>Corpo Estriado Dorsal:</b> Núcleo Caudado + Núcleo Lentiforme | <b>Amígdala:</b> medo, raiva, ansiedade | <b>Hipocampo:</b> consolidação de memória | <b>Cápsula Interna:</b> entre caudado e lentiforme — via corticospinal' }
+};
+
+function selectLobe(key, btn) {
+  if(btn) {
+    document.querySelectorAll('.mapa-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    btn.style.background = lobeInfo[key].color;
+    btn.style.color = 'white';
+    setTimeout(() => {
+      document.querySelectorAll('.mapa-btn').forEach(b => {
+        if(!b.classList.contains('active')) { b.style.background = 'white'; }
+      });
+    }, 50);
+  }
+  const d = lobeInfo[key];
+  document.getElementById('mapa-info').innerHTML = `<strong style="color:${d.color}">${d.name}</strong><span>${d.text}</span>`;
+}
+
+// ===== FLASHCARDS =====
+const allCards = [
+  { cat:'lobos', term:'Lobo Frontal', answer:'Funções executivas, controle motor voluntário (M1), planejamento, personalidade, motricidade da fala (Broca). Sulcos: pré-central, frontal sup., frontal inf. Giros: pré-central, frontal sup., médio, inferior.' },
+  { cat:'lobos', term:'Lobo Parietal', answer:'Processamento somatossensorial (S1), integração multissensorial, percepção espacial, atenção. Sulco pós-central + giro pós-central. Tato, dor, temperatura, propriocepção.' },
+  { cat:'lobos', term:'Lobo Temporal', answer:'Processamento auditivo, memória de longo prazo, reconhecimento de objetos. Giros: temporal sup. (Wernicke), médio, inferior. Sulcos: temporal sup. e inf.' },
+  { cat:'lobos', term:'Lobo Occipital', answer:'Processamento de informações visuais. Face medial: sulco calcarino (córtex visual primário = área 17 de Brodmann) e cúneo.' },
+  { cat:'lobos', term:'Lobo Insular', answer:'ESCONDIDO dentro do sulco lateral. Giros da ínsula (nº 17). Homeostase, consciência interoceptiva, processamento gustativo, dor visceral, regulação autonômica.' },
+  { cat:'giros', term:'Giro Pré-central', answer:'Área Motora Primária (M1). Controle do músculo esquelético voluntário. Lobo frontal, anterior ao sulco central. Homúnculo motor.' },
+  { cat:'giros', term:'Giro Pós-central', answer:'Área Somatossensorial (S1). Processa: tato, pressão, vibrações, coceira, cócegas, temperatura, dor, propriocepção. Lobo parietal, posterior ao sulco central.' },
+  { cat:'giros', term:'Giro Frontal Inferior', answer:'Contém a ÁREA DE BROCA (hemisfério esquerdo). Produção motora da fala. Lesão → afasia de Broca: fala não fluente, compreensão preservada.' },
+  { cat:'giros', term:'Giro Temporal Superior', answer:'Contém a ÁREA DE WERNICKE (hemisfério esquerdo). Compreensão da linguagem. Lesão → afasia de Wernicke: fala fluente mas sem sentido, compreensão comprometida.' },
+  { cat:'giros', term:'Giro do Cíngulo', answer:'Face medial, acima do corpo caloso. Coordenação de respostas emocionais, regulação do comportamento autonômico, processamento da dor, memória topográfica.' },
+  { cat:'giros', term:'Giro Parahipocampal', answer:'Face inferior/medial do lobo temporal. Portal de entrada/saída de informações para o hipocampo. Processamento de cenas espaciais e memória contextual.' },
+  { cat:'giros', term:'Pré-cúneo', answer:'Face medial do lobo parietal. Integração multissensorial, autorreflexão, consciência do "eu", memória episódica. Uma das áreas mais conectadas do cérebro.' },
+  { cat:'giros', term:'Cúneo', answer:'Face medial do lobo occipital, acima do sulco calcarino. Processamento visual básico.' },
+  { cat:'giros', term:'Sulco Central (Rolando)', answer:'Divide lobo frontal (anterior = motor) do lobo parietal (posterior = sensitivo). Marco anatômico principal. Separa giro pré-central do pós-central.' },
+  { cat:'giros', term:'Sulco Lateral (Sylvius)', answer:'Delimita a borda superior do lobo temporal. Separa frontal/parietal do temporal. A ÍNSULA fica escondida dentro dele.' },
+  { cat:'giros', term:'Sulco Calcarino', answer:'Face medial do lobo occipital. Contém o córtex visual primário. Lesão → hemianopsia ou cegueira cortical.' },
+  { cat:'nucleos', term:'Núcleo Caudado', answer:'Parte do corpo estriado dorsal. Controle motor fino, iniciação e planejamento de movimentos voluntários. Age integrado com cerebelo e núcleos subtalâmicos. Tem cabeça, corpo e cauda.' },
+  { cat:'nucleos', term:'Núcleo Lentiforme', answer:'Parte do corpo estriado dorsal (= putâmen + globo pálido). Modulação e regulação do movimento. Lateral à cápsula interna. Tem formato de lente.' },
+  { cat:'nucleos', term:'Amígdala (Corpo Amigdaloide)', answer:'Polo temporal medial. Processamento do medo, prazer, raiva e ansiedade. Respostas a estímulos ameaçadores. Parte central do sistema límbico. Forma de amêndoa.' },
+  { cat:'nucleos', term:'Corpo Estriado Dorsal', answer:'= Núcleo Caudado + Núcleo Lentiforme. Responsável pelo controle da MOTRICIDADE. Integrante dos gânglios da base.' },
+  { cat:'nucleos', term:'Cápsula Interna', answer:'Feixe de fibras brancas entre núcleo caudado (medial) e lentiforme (lateral). Contém trato corticospinal e fibras tálamo-corticais. Lesão → hemiplegia contralateral.' },
+  { cat:'medial', term:'Corpo Caloso', answer:'Face medial. Principal via de integração inter-hemisférica. Transfere informações sensoriais, motoras e cognitivas entre hemisfério esquerdo e direito. Maior comissura cerebral.' },
+  { cat:'medial', term:'Fórnice', answer:'Face medial, abaixo do corpo caloso. PRINCIPAL VIA EFERENTE do hipocampo. Essencial para consolidação da memória episódica e reconhecimento de informações.' },
+  { cat:'inferior', term:'Hipocampo', answer:'Face inferior/medial do lobo temporal. Consolidação de memória de curto→longo prazo. Memória espacial e topográfica. Memória emocional. Lesão bilateral → amnésia anterógrada grave (Caso H.M.).' },
+  { cat:'inferior', term:'Unco', answer:'Face inferior — ponta medial do lobo temporal. Córtex piriforme: processamento olfatório primário. Conexão com amígdala (sistema límbico). Herniação do unco: sinal de herniação transtentorial.' },
+  { cat:'inferior', term:'Sulco Rinal', answer:'Face inferior. Separa o córtex piriforme (paleocórtex olfatório) do neocórtex. Delimita o unco anteriormente. Cor verde nas figuras.' },
+  { cat:'inferior', term:'Sulco Colateral', answer:'Face inferior. Delimita lateralmente o giro parahipocampal. Cor vermelha nas figuras da aula.' },
+];
+
+let filteredCards = [...allCards];
+let cardIdx = 0;
+
+function filterCards(cat, btn) {
+  document.querySelectorAll('.fc-filter button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filteredCards = cat === 'todos' ? [...allCards] : allCards.filter(c => c.cat === cat);
+  cardIdx = 0;
+  renderCard();
+}
+
+function renderCard() {
+  if(!filteredCards.length) return;
+  const c = filteredCards[cardIdx];
+  document.getElementById('fc-cat').textContent = ({lobos:'Lobos',giros:'Giros & Sulcos',nucleos:'Núcleos',medial:'Face Medial',inferior:'Face Inferior'}[c.cat] || c.cat).toUpperCase();
+  document.getElementById('fc-term').textContent = c.term;
+  document.getElementById('fc-back-title').textContent = c.term;
+  document.getElementById('fc-answer').textContent = c.answer;
+  document.getElementById('fc-count').textContent = (cardIdx+1) + ' / ' + filteredCards.length;
+  document.getElementById('fc-bar').style.width = ((cardIdx+1)/filteredCards.length*100) + '%';
+  document.getElementById('fc-card').classList.remove('flipped');
+}
+
+function flipCard() { document.getElementById('fc-card').classList.toggle('flipped'); }
+function nextCard() { cardIdx = (cardIdx+1) % filteredCards.length; renderCard(); }
+function prevCard() { cardIdx = (cardIdx-1+filteredCards.length) % filteredCards.length; renderCard(); }
+
+// ===== QUIZ =====
+const allQuestions = [
+  { tema:'lobos', q:'Qual lobo é responsável pelo controle motor voluntário e funções executivas?', opts:['Temporal','Parietal','Frontal','Occipital'], ans:2, exp:'O lobo frontal abriga o córtex motor primário (giro pré-central) e as áreas pré-frontais responsáveis por planejamento, personalidade e funções executivas.' },
+  { tema:'lobos', q:'Qual é a função principal do lobo parietal?', opts:['Processamento auditivo','Processamento somatossensorial e integração multissensorial','Controle motor voluntário','Processamento visual'], ans:1, exp:'O lobo parietal abriga o giro pós-central (córtex somatossensorial primário - S1), que processa tato, pressão, dor, temperatura e propriocepção.' },
+  { tema:'lobos', q:'O sulco lateral (Sylvius) esconde qual estrutura por baixo?', opts:['Hipocampo','Núcleo Caudado','Lobo Insular (ínsula)','Giro do Cíngulo'], ans:2, exp:'A ínsula fica completamente coberta pelos lobos frontal, parietal e temporal, acessível apenas abrindo o sulco lateral.' },
+  { tema:'lobos', q:'Quais são as 3 faces do telencéfalo?', opts:['Anterior, posterior, lateral','Súpero-lateral, medial e inferior','Superior, inferior e medial','Dorsal, ventral e lateral'], ans:1, exp:'As três faces são: súpero-lateral (vista de lado), medial (vista de dentro) e inferior (vista de baixo).' },
+  { tema:'nucleos', q:'O que compõe o Corpo Estriado Dorsal?', opts:['Amígdala + Hipocampo','Tálamo + Hipotálamo','Núcleo Caudado + Núcleo Lentiforme','Cápsula Interna + Corpo Caloso'], ans:2, exp:'O corpo estriado dorsal é formado pelo núcleo caudado e pelo núcleo lentiforme, ambos responsáveis pelo controle da motricidade.' },
+  { tema:'nucleos', q:'A amígdala processa principalmente:', opts:['Memória espacial','Visão e processamento visual','Olfato primário','Medo, prazer, raiva e ansiedade'], ans:3, exp:'A amígdala (corpo amigdaloide) é central para o processamento emocional, especialmente medo, prazer, raiva e ansiedade, e respostas a estímulos ameaçadores.' },
+  { tema:'nucleos', q:'A cápsula interna está localizada:', opts:['Entre tálamo e hipotálamo','Entre núcleo caudado e núcleo lentiforme','Entre hipocampo e amígdala','Entre o corpo caloso e o fórnice'], ans:1, exp:'A cápsula interna é o feixe de fibras brancas posicionado entre o núcleo caudado (medial) e o núcleo lentiforme (lateral), contendo o trato corticospinal.' },
+  { tema:'linguagem', q:'Onde fica a área de Broca e qual sua função?', opts:['Giro temporal superior — compreensão da fala','Giro frontal inferior — produção motora da fala','Giro pré-central — controle motor','Giro pós-central — somatossensorial'], ans:1, exp:'A área de Broca fica no giro frontal inferior (lobo frontal, hemisfério esquerdo). Lesão → afasia de Broca: fala não fluente, mas compreensão preservada.' },
+  { tema:'linguagem', q:'Lesão na área de Wernicke causa:', opts:['Paralisia do lado direito do corpo','Fala não fluente com compreensão preservada','Fala fluente mas sem sentido, compreensão comprometida','Perda de memória de longo prazo'], ans:2, exp:'Wernicke fica no giro temporal superior. Lesão → afasia de Wernicke: o paciente fala muito e fluentemente, mas o conteúdo não faz sentido, e não compreende o que ouve.' },
+  { tema:'linguagem', q:'Qual sulco divide a área motora da área sensitiva da linguagem?', opts:['Sulco lateral','Sulco calcarino','Sulco central (Rolando)','Sulco colateral'], ans:2, exp:'O sulco central divide o giro pré-central (frontal = motor = Broca) do giro pós-central (parietal = sensitivo). As áreas de linguagem ficam em cada lado desse sulco.' },
+  { tema:'memoria', q:'O hipocampo é essencial para:', opts:['Processamento visual primário','Controle motor fino','Consolidação da memória de curto para longo prazo','Regulação autonômica'], ans:2, exp:'O hipocampo consolida a memória episódica e espacial. O famoso caso H.M. (remoção bilateral) demonstrou que sem hipocampo não se formam novas memórias (amnésia anterógrada).' },
+  { tema:'memoria', q:'O fórnice é:', opts:['Uma comissura que conecta os hemisférios','A principal via EFERENTE do hipocampo','O córtex visual primário','A via aferente da amígdala'], ans:1, exp:'O fórnice é o principal trato de fibras que sai do hipocampo, essencial para a consolidação da memória episódica e o reconhecimento de informações.' },
+  { tema:'memoria', q:'O pré-cúneo está associado a:', opts:['Processamento auditivo','Controle da motricidade fina','Autorreflexão, consciência do "eu" e memória episódica','Regulação da temperatura corporal'], ans:2, exp:'O pré-cúneo (face medial do lobo parietal) é uma das regiões mais altamente conectadas do cérebro, associada a autorreflexão, consciência do "eu", integração multissensorial e memória episódica.' },
+  { tema:'lobos', q:'O sulco calcarino está localizado em qual face e lobo?', opts:['Face lateral, lobo temporal','Face inferior, lobo occipital','Face medial, lobo occipital','Face superior, lobo parietal'], ans:2, exp:'O sulco calcarino fica na face medial do lobo occipital e contém o córtex visual primário (área 17 de Brodmann). Lesão causa hemianopsia ou cegueira cortical.' },
+  { tema:'nucleos', q:'Qual estrutura conecta os dois hemisférios cerebrais?', opts:['Fórnice','Corpo Caloso','Cápsula Interna','Tálamo'], ans:1, exp:'O corpo caloso é a maior comissura cerebral, conectando os dois hemisférios e permitindo a integração de informações sensoriais, motoras e cognitivas.' },
+  { tema:'lobos', q:'O giro parahipocampal tem qual função principal?', opts:['Produção da fala','Controle autonômico','Portal de entrada/saída do hipocampo e memória contextual','Processamento visual primário'], ans:2, exp:'O giro parahipocampal é o portal de entrada e saída de informações para o hipocampo, processando cenas espaciais e memória contextual.' },
+  { tema:'nucleos', q:'O unco está relacionado com qual sentido?', opts:['Visão','Audição','Tato','Olfato'], ans:3, exp:'O unco contém o córtex piriforme, responsável pelo processamento olfatório primário. Por isso lesões no unco (herniação uncal) podem causar alucinações olfativas.' },
+  { tema:'lobos', q:'O giro do cíngulo se encontra em qual face do telencéfalo?', opts:['Súpero-lateral','Inferior','Medial','Superior'], ans:2, exp:'O giro do cíngulo está na face medial, logo acima do corpo caloso, e está relacionado com emoções, comportamento autonômico, dor e memória topográfica.' },
+];
+
+let quizFilter = 'todos';
+let quizQueue = [];
+let qIdx = 0;
+let qScore = 0;
+let answered = false;
+
+function setQuizFilter(f, btn) {
+  document.querySelectorAll('.quiz-filter button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  quizFilter = f;
+  initQuiz();
+}
+
+function initQuiz() {
+  let pool = quizFilter === 'todos' ? [...allQuestions] : allQuestions.filter(q => q.tema === quizFilter);
+  quizQueue = pool.sort(() => Math.random() - .5);
+  qIdx = 0; qScore = 0; answered = false;
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('quiz-main').style.display = 'block';
+  renderQ();
+}
+
+function renderQ() {
+  answered = false;
+  const q = quizQueue[qIdx];
+  document.getElementById('q-num').textContent = 'Pergunta ' + (qIdx+1) + ' de ' + quizQueue.length;
+  document.getElementById('q-prog-fill').style.width = ((qIdx+1)/quizQueue.length*100) + '%';
+  document.getElementById('q-score-badge').textContent = qScore + '/' + qIdx;
+  document.getElementById('q-text').textContent = q.q;
+  document.getElementById('q-feedback').className = 'quiz-feedback';
+  document.getElementById('q-next').className = 'quiz-next';
+  const optsEl = document.getElementById('q-opts');
+  optsEl.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = o;
+    btn.onclick = () => answerQ(i, q.ans, q.exp);
+    optsEl.appendChild(btn);
+  });
+}
+
+function answerQ(chosen, correct, exp) {
+  if(answered) return;
+  answered = true;
+  const btns = document.querySelectorAll('.quiz-opt');
+  btns.forEach((b, i) => {
+    b.disabled = true;
+    if(i === correct) b.classList.add('correct');
+    else if(i === chosen) b.classList.add('wrong');
+  });
+  if(chosen === correct) qScore++;
+  const fb = document.getElementById('q-feedback');
+  fb.innerHTML = (chosen === correct ? '✅ <b>Correto!</b> ' : '❌ <b>Incorreto.</b> ') + exp;
+  fb.className = 'quiz-feedback show';
+  document.getElementById('q-score-badge').textContent = qScore + '/' + (qIdx+1);
+  document.getElementById('q-next').className = 'quiz-next show';
+}
+
+function nextQ() {
+  qIdx++;
+  if(qIdx >= quizQueue.length) {
+    document.getElementById('quiz-main').style.display = 'none';
+    document.getElementById('quiz-result').style.display = 'block';
+    const pct = qScore / quizQueue.length;
+    document.getElementById('result-score').textContent = qScore + '/' + quizQueue.length;
+    document.getElementById('result-msg').textContent = pct >= .9 ? '🏆 Excelente! Vai arrasar na prova!' : pct >= .7 ? '👏 Muito bom! Mais uma rodada e tá perfeito.' : pct >= .5 ? '📚 Quase lá! Revise os flashcards.' : '💪 Continue praticando! Use os flashcards.';
+    document.getElementById('result-sub').textContent = Math.round(pct*100) + '% de acertos';
+  } else { renderQ(); }
+}
+
+// INIT
+selectLobe('frontal', document.querySelector('.mapa-btn'));
+renderCard();
+initQuiz();
+</script>
+</body>
+</html>
